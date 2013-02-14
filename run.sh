@@ -11,7 +11,7 @@ function printlog() {
 }
 
 function runtest() {
-	echo -n "Running $1 ... "
+	echo -ne "\e[1mRunning\e[00m $1 ... "
 	testlog="`./tests/$1 2>&1`"
 	res=$?
 

@@ -30,6 +30,9 @@ function runtest() {
 		return 1
 	elif [ "$res" == "3" ] ; then
 		echo -e "\e[1;33mSKIPPED\e[00m"
+		if [ "$DEBUG" == "1" ] ; then
+			printlog "$testlog"
+		fi
 	else
 		echo -e "\e[1;34mWTF?\e[00m"
 		printlog "$testlog"
@@ -40,5 +43,10 @@ function runtest() {
 
 
 ls ./tests | while read testname ; do
+	if [ "$1" == "cleanup" ] ; then
+		echo "$testname" | grep -q "cleanup" || continue
+	elif [ "$1" == "nocleanup" ] ; then
+		echo "$testname" | grep -q "cleanup" && continue
+	fi
 	runtest "$testname"
 done

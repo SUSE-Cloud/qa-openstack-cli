@@ -1,9 +1,7 @@
 #!/bin/bash
 
 source ~/.openrc
-
 source config
-
 
 function glance_flags() {
 	case $1 in
@@ -16,7 +14,7 @@ function glance_flags() {
 				echo "-property vm_mode=xen"
 			fi
 		;;
-		*)
+		"")
 			if [ "$INSECURE" == "1" ] ; then
 				echo "--insecure"
 			fi
@@ -24,7 +22,31 @@ function glance_flags() {
 	esac
 }
 
+function nova_flags() {
+	case $1 in
+		"")
+			if [ "$INSECURE" == "1" ] ; then
+				echo "--insecure"
+			fi
+		;;
+	esac
+}
 
+function exit_ok() {
+	exit 0
+}
+
+function exit_fail() {
+	exit 1
+}
+
+function exit_error() {
+	exit 2
+}
+
+function exit_skipped() {
+	exit 3
+}
 
 
 if [ "$DEBUG" == "1" ] ; then

@@ -1,0 +1,6 @@
+export INSECURE=0
+
+#kvm/xen-hvm/xen-pv
+export VIRT=kvm
+
+DEBUG=1

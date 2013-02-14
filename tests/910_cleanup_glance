@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source functions
+
+imgid=$(glance `glance_flags` image-list --name jeos --status active | grep jeos | awk '{print $2}')
+
+if [ "$imgid" != "" ] ; then
+	glance `glance_flags` image-delete $imgid
+else
+	exit 3 # skipped
+fi

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source functions
+
+imgid=$(glance `glance_flags` image-list --name jeos --status active | grep jeos | awk '{print $2}')
+
+if [ "$imgid" == "" ] ; then
+	glance `glance_flags` image-create `glance_flags image-create` --name=jeos --is-public=True --container-format=bare --disk-format=qcow2 --copy-from http://clouddata.cloud.suse.de/images/jeos-64.qcow2
+else
+	exit 3 # skipped
+fi

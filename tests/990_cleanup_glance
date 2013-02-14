@@ -10,10 +10,10 @@ if [ "$imgid" != "" ] ; then
 	if [ "$imgid" != "" ] ; then
 		echo "imgid: '$imgid'"
 		glance `glance_flags` image-list --name jeos --status active
-		exit 1
+		exit_fail
 	else
-		exit 0
+		exit_ok
 	fi
 else
-	exit 3 # skipped
+	exit_skipped
 fi

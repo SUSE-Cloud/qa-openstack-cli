@@ -1,0 +1,18 @@
+#!/bin/bash
+
+source functions
+
+userid=$(keystone `keystone_flags` user-list | grep test_user | awk '{print $2}')
+
+if [ "$userid" != "" ] ; then
+	keystone `keystone_flags` user-update $userid --enabled false
+	userid_disabled=$(keystone `keystone_flags` user-list | grep -e test_user -e False | awk '{print $2}')
+	if [ "$userid_disabled" == "" ] ; then
+		keystone `keystone_flags` user-get $userid
+		exit_fail
+	else
+		exit_ok
+	fi
+else
+	exit_skipped
+fi

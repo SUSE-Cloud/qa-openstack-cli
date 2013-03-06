@@ -4,3 +4,7 @@ export INSECURE=0
 export VIRT=kvm
 
 DEBUG=0
+
+MULTI_INST_COUNT=3
+
+CYCLE_COUNT=3

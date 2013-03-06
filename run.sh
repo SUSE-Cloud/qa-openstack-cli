@@ -11,7 +11,9 @@ function printlog() {
 }
 
 function runtest() {
-	echo -ne "\e[1mRunning\e[00m $1 ... "
+	dotcount=`echo "40 - ${#1}" | bc`
+	dots=`seq -s "." $dotcount | sed 's/[0-9]//g'`
+	echo -ne "\e[1mRunning\e[00m $1 $dots "
 	testlog="`./tests/$1 2>&1`"
 	res=$?
 
@@ -44,7 +46,7 @@ function runtest() {
 
 ls ./tests | while read testname ; do
 	if [ "$1" == "cleanup" ] ; then
-		echo "$testname" | grep -q "cleanup" || continue
+		echo "$testname" | grep -v "nocleanup" | grep -q "cleanup" || continue
 	elif [ "$1" == "nocleanup" ] ; then
 		echo "$testname" | grep -q "cleanup" && continue
 	fi

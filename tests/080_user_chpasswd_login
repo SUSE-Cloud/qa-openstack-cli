@@ -1,0 +1,21 @@
+#!/bin/bash
+
+source functions
+
+userid=$(keystone `keystone_flags` user-list | grep test_user | awk '{print $2}')
+
+if [ "$userid" != "" ] ; then
+	if keystone `keystone_flags` --os-username test_user user-password-update $userid --pass openstack ; then
+		if nova `nova_flags` --os_username test_user --os_password openstack list ; then
+			keystone `keystone_flags` user-password-update $userid --pass crowbar # reset
+			exit_ok
+		else
+			keystone `keystone_flags` user-password-update $userid --pass crowbar # reset
+			exit_fail
+		fi
+	else
+		exit_fail
+	fi
+else
+	exit_skipped
+fi

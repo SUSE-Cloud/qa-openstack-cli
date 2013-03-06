@@ -1,0 +1,19 @@
+#!/bin/bash
+
+source functions
+
+tenantid=$(keystone `keystone_flags` tenant-list | grep test_tenant | awk '{print $2}')
+
+if [ "$tenantid" != "" ] ; then
+	keystone `keystone_flags` tenant-delete $tenantid
+	tenantid=$(keystone `keystone_flags` tenant-list | grep test_tenant | awk '{print $2}')
+	if [ "$tenantid" != "" ] ; then
+		echo "tenantid: '$tenantid'"
+		keystone `keystone_flags` tenant-list
+		exit_fail
+	else
+		exit_ok
+	fi
+else
+	exit_skipped
+fi

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+source functions
+
+instid=$(nova `nova_flags` --os_username crowbar list --name jeos_01 | grep jeos_01 | awk '{print $2}')
+
+if [ "$instid" != "" ] ; then
+	nova `nova_flags` --os_username crowbar delete $instid || exit_fail
+	for i in {1..30} ; do
+		sleep 2
+		instid=$(nova `nova_flags` --os_username crowbar list --name jeos_01 | grep jeos_01 | awk '{print $2}')
+		if [ "$instid" == "" ] ; then
+			exit_ok
+		fi
+	done
+	echo "instid: '$instid'"
+	nova `nova_flags` list --name jeos_01
+	exit_fail
+else
+	exit_skipped
+fi

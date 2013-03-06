@@ -1,0 +1,19 @@
+#!/bin/bash
+
+source functions
+
+tenantid=$(keystone `keystone_flags` --os-tenant-name admin tenant-list | grep openstack | awk '{print $2}')
+
+if [ "$tenantid" != "" ] ; then
+	keystone `keystone_flags` --os-tenant-name admin tenant-update $tenantid --enabled false \
+		--description openstack #FIXME: description more or less required field
+	tenantid_disabled=$(keystone `keystone_flags` --os-tenant-name admin tenant-list | grep -e openstack -e False | awk '{print $2}')
+	if [ "$tenantid_disabled" == "" ] ; then
+		keystone `keystone_flags` --os-tenant-name admin tenant-get $tenantid
+		exit_fail
+	else
+		exit_ok
+	fi
+else
+	exit_skipped
+fi

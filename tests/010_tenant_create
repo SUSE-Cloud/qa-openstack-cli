@@ -1,0 +1,20 @@
+#!/bin/bash
+
+source functions
+
+tenantid=$(keystone `keystone_flags` tenant-list | grep test_tenant | awk '{print $2}')
+
+if [ "$tenantid" == "" ] ; then
+	keystone `keystone_flags` tenant-create --name test_tenant --description "Test Tenant to be deleted soon"
+	tenantid=$(keystone `keystone_flags` tenant-list | grep test_tenant | awk '{print $2}')
+	if [ "$tenantid" == "" ] ; then
+		keystone `keystone_flags` tenant-list
+		exit_fail
+	else
+		keystone `keystone_flags` tenant-get $tenantid
+		exit_ok
+	fi
+else
+	exit_skipped
+fi
+

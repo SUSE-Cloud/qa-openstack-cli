@@ -1,0 +1,19 @@
+#!/bin/bash
+
+source functions
+
+userid=$(keystone `keystone_flags` user-list | grep test_user | awk '{print $2}')
+
+if [ "$userid" != "" ] ; then
+	keystone `keystone_flags` user-delete $userid
+	userid=$(keystone `keystone_flags` user-list | grep test_user | awk '{print $2}')
+	if [ "$userid" != "" ] ; then
+		echo "userid: '$userid'"
+		keystone `keystone_flags` user-list
+		exit_fail
+	else
+		exit_ok
+	fi
+else
+	exit_skipped
+fi

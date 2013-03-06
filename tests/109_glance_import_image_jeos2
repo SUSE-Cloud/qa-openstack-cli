@@ -2,18 +2,18 @@
 
 source functions
 
-imgid=$(glance `glance_flags` image-list --name jeos --status active | grep jeos | awk '{print $2}')
+imgid=$(glance `glance_flags` image-list --name jeos2 --status active | grep jeos2 | awk '{print $2}')
 
 if [ "$imgid" == "" ] ; then
 	glance `glance_flags` image-create `glance_flags image-create` \
-		--name=jeos --is-public=True --container-format=bare \
+		--name=jeos2 --is-public=True --container-format=bare \
 		--disk-format=qcow2 --copy-from http://clouddata.cloud.suse.de/images/jeos-64.qcow2
-	imgid=$(glance `glance_flags` image-list --name jeos --status active | grep jeos | awk '{print $2}')
+	imgid=$(glance `glance_flags` image-list --name jeos2 --status active | grep jeos2 | awk '{print $2}')
 	if [ "$imgid" == "" ] ; then
 		glance `glance_flags` image-list
 		exit_fail
 	else
-		nova image-show jeos
+		nova image-show jeos2
 		exit_ok
 	fi
 else

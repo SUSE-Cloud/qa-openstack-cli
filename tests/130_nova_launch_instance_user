@@ -1,0 +1,29 @@
+#!/bin/bash
+
+source functions
+
+nova `nova_flags` image-show jeos1 || exit_skipped
+nova `nova_flags` flavor-show m1.tiny || exit_skipped
+
+
+imgid=$(glance `glance_flags` image-list --name jeos1 --status active | grep jeos1 | awk '{print $2}')
+flavorid=$(nova `nova_flags` flavor-list | grep "m1.tiny" | awk '{print $2}')
+
+instid=$(nova `nova_flags` list --name jeos_01 | grep jeos_01 | awk '{print $2}')
+
+if [ "$instid" == "" ] ; then
+	nova `nova_flags` --os_username crowbar boot --flavor $flavorid --image $imgid jeos_01 || exit_fail
+	for i in {1..30} ; do
+		sleep 2
+		instid=$(nova `nova_flags` --os_username crowbar list --name jeos_01 --status ACTIVE | grep jeos_01 | awk '{print $2}')
+		if [ "$instid" != "" ] ; then
+			nova `nova_flags` list
+			exit_ok
+		fi
+	done
+	exit_fail
+else
+	echo "Instance already running: '$instid'"
+	exit_skipped
+fi
+

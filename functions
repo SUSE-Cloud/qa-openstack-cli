@@ -32,6 +32,16 @@ function nova_flags() {
 	esac
 }
 
+function keystone_flags() {
+	case $1 in
+		"")
+			if [ "$INSECURE" == "1" ] ; then
+				echo "--insecure"
+			fi
+		;;
+	esac
+}
+
 function exit_ok() {
 	exit 0
 }

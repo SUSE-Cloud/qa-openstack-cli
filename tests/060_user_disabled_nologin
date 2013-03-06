@@ -1,0 +1,16 @@
+#!/bin/bash
+
+source functions
+
+userid=$(keystone `keystone_flags` user-list | grep test_user | awk '{print $2}')
+
+if [ "$userid" != "" ] ; then
+	if nova `nova_flags` --os_username test_user list ; then
+		keystone `keystone_flags` user-get $userid
+		exit_fail
+	else
+		exit_ok
+	fi
+else
+	exit_skipped
+fi

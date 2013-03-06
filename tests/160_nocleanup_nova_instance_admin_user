@@ -1,0 +1,20 @@
+#!/bin/bash
+
+source functions
+
+instid=$(nova `nova_flags` --os_tenant_name admin list --name jeos_03 | grep jeos_03 | awk '{print $2}')
+
+if [ "$instid" != "" ] ; then
+	nova `nova_flags` --os_username crowbar delete $instid || exit_ok
+	for i in {1..30} ; do
+		sleep 2
+		instid=$(nova `nova_flags` --os_tenant_name admin list --name jeos_03 | grep jeos_03 | awk '{print $2}')
+		if [ "$instid" == "" ] ; then
+			exit_fail
+		fi
+	done
+	nova `nova_flags` --os_tenant_name admin list --name jeos_03
+	exit_ok
+else
+	exit_skipped
+fi

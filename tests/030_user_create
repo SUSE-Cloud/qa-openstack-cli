@@ -1,0 +1,26 @@
+#!/bin/bash
+
+source functions
+
+tenantid=$(keystone `keystone_flags` tenant-list | grep openstack | awk '{print $2}')
+userid=$(keystone `keystone_flags` user-list | grep test_user | awk '{print $2}')
+
+if [ "$tenantid" != "" ] ; then
+	if [ "$userid" == "" ] ; then
+		keystone `keystone_flags` user-create --tenant-id $tenantid \
+			--name test_user --pass crowbar --email tux@suse.de --enabled true
+		userid=$(keystone `keystone_flags` user-list | grep test_user | awk '{print $2}')
+		if [ "$userid" == "" ] ; then
+			keystone `keystone_flags` user-list
+			exit_fail
+		else
+			keystone `keystone_flags` user-get $userid
+			exit_ok
+		fi
+	else
+		exit_skipped
+	fi
+else
+	exit_skipped
+fi
+

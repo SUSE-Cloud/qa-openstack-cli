@@ -11,7 +11,7 @@ function printlog() {
 }
 
 function runtest() {
-	dotcount=`echo "40 - ${#1}" | bc`
+	dotcount=`echo "45 - ${#1}" | bc`
 	dots=`seq -s "." $dotcount | sed 's/[0-9]//g'`
 	echo -ne "\e[1mRunning\e[00m $1 $dots "
 	testlog="`./tests/$1 2>&1`"

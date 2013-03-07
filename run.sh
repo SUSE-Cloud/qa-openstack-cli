@@ -77,10 +77,10 @@ duration_str=`date -ud @$timesec +%M:%S`
 
 echo
 echo "Ran $count_test tests in $duration_str"
-echo " --> $count_ok ok"
-echo " --> $count_fail failed"
-echo " --> $count_error errors"
-echo " --> $count_skipped skipped"
+printf " --> %2d ok\n"      $count_ok
+printf " --> %2d fail\n"    $count_fail
+printf " --> %2d errors\n"  $count_error
+printf " --> %2d skipped\n" $count_skipped
 
 if [ "$count_fail" == "0" ] ; then
 	if [ "$count_ok" -gt "0" ] ; then

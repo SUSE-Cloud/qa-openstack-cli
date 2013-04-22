@@ -1,6 +1,10 @@
 #!/bin/bash
 
 source ~/.openrc
+unset SERVICE_ENDPOINT
+# we will use the tenant name
+unset OS_TENANT_ID
+
 source config
 
 function glance_flags() {

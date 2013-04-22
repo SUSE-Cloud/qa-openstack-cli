@@ -8,6 +8,15 @@ if [ "$imgid" == "" ] ; then
 	glance `glance_flags` image-create `glance_flags image-create` \
 		--name=jeos1 --is-public=True --container-format=bare \
 		--disk-format=qcow2 --copy-from http://clouddata.cloud.suse.de/images/jeos-64.qcow2
+	if glance `glance_flags` image-list --name jeos1 | grep -q jeos1 ; then
+		for i in {1..15} ; do
+			if glance `glance_flags` image-list --name jeos1 --status active | grep -q jeos1 ; then
+				break
+			else
+				sleep 1
+			fi
+		done
+	fi
 	imgid=$(glance `glance_flags` image-list --name jeos1 --status active | grep jeos1 | awk '{print $2}')
 	if [ "$imgid" == "" ] ; then
 		glance `glance_flags` image-list

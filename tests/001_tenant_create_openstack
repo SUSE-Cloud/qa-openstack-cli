@@ -1,0 +1,22 @@
+#!/bin/bash
+
+source functions
+
+export OS_TENANT_NAME=admin
+export NOVA_PROJECT_ID=$OS_TENANT_NAME
+
+tenantid=$(keystone `keystone_flags` tenant-list | grep openstack | awk '{print $2}')
+
+if [ "$tenantid" == "" ] ; then
+	keystone `keystone_flags` tenant-create --name openstack --description "Openstack tenant"
+	tenantid=$(keystone `keystone_flags` tenant-list | grep openstack | awk '{print $2}')
+	if [ "$tenantid" == "" ] ; then
+		keystone `keystone_flags` tenant-list
+		exit_fail
+	else
+		keystone `keystone_flags` tenant-get $tenantid
+		exit_ok
+	fi
+else
+	exit_skipped
+fi

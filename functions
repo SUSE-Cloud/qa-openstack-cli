@@ -5,6 +5,9 @@ unset SERVICE_ENDPOINT
 # we will use the tenant name
 unset OS_TENANT_ID
 
+export OS_TENANT_NAME=openstack
+export NOVA_PROJECT_ID=$OS_TENANT_NAME
+
 source config
 
 function glance_flags() {

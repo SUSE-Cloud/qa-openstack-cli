@@ -13,7 +13,7 @@ if [ "$imgid" == "" ] ; then
 			if glance `glance_flags` image-list --name jeos2 --status active | grep -q jeos2 ; then
 				break
 			else
-				sleep 1
+				sleep 2
 			fi
 		done
 	fi

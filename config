@@ -1,6 +1,6 @@
 export INSECURE=0
 
-#kvm/xen-hvm/xen-pv
+#kvm/xen-hvm/xen-pv/lxc
 export VIRT=kvm
 
 export DEBUG=0
@@ -10,3 +10,9 @@ export BREAK_ON_FAIL=0
 export MULTI_INST_COUNT=3
 
 export CYCLE_COUNT=3
+
+
+
+export IMG_KVM="http://clouddata.cloud.suse.de/images/jeos-64.qcow2"
+export IMG_PV="http://clouddata.cloud.suse.de/images/jeos-64-pv.qcow2"
+export IMG_LXC="http://clouddata.cloud.suse.de/images/debian.5-0.x86.qcow2"

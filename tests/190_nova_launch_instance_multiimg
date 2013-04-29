@@ -16,9 +16,12 @@ instid=$(nova `nova_flags` list --name jeos_multiimg | grep jeos_multiimg | awk 
 
 if [ "$instid" == "" ] ; then
 	for i in jeos1 jeos2 ; do
-		nova `nova_flags` --os_username crowbar boot --flavor $flavorid --image `get_imgid $i` jeos_multiimg_$i --poll || exit_fail &
+		nova `nova_flags` --os_username crowbar boot --flavor $flavorid --image `get_imgid $i` jeos_multiimg_$i --poll &
+		pids="$pids $!"
 	done
-	wait
+	for pid in $pids ; do
+		wait $pid || exit_fail
+	done
 	echo "Done Building"
 	instids=$(nova `nova_flags` --os_username crowbar list --name jeos_multiimg --status ACTIVE | grep jeos_multiimg | awk '{print $2}')
 	instidcount=0

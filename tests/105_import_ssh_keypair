@@ -1,0 +1,20 @@
+#!/bin/bash
+
+source functions
+
+fingerprint=$(nova `nova_flags` keypair-list | grep dashboard | awk '{print $4}')
+
+if [ "$fingerprint" == "" ] ; then
+	nova `nova_flags` keypair-add --pub-key ~/.ssh/id_rsa.pub dashboard
+	fingerprint=$(nova `nova_flags` keypair-list | grep dashboard | awk '{print $4}')
+	if [ "$fingerprint" == "" ] ; then
+		nova `nova_flags` keypair-list
+		exit_fail
+	else
+		nova keypair-list | grep -e '+' -e Name -e dashboard
+		exit_ok
+	fi
+else
+	exit_skipped
+fi
+

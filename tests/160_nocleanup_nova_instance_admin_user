@@ -6,7 +6,7 @@ instid=$(nova `nova_flags` --os_tenant_name admin list --name jeos_03 | grep jeo
 
 if [ "$instid" != "" ] ; then
 	nova `nova_flags` --os_username crowbar delete $instid || exit_ok
-	for i in {1..30} ; do
+	for i in {1..10} ; do
 		sleep 2
 		instid=$(nova `nova_flags` --os_tenant_name admin list --name jeos_03 | grep jeos_03 | awk '{print $2}')
 		if [ "$instid" == "" ] ; then

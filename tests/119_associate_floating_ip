@@ -1,0 +1,21 @@
+#!/bin/bash
+
+source functions
+
+floating_ip=$(nova `nova_flags` floating-ip-list | grep None | awk '{print $2}')
+instid=$(nova `nova_flags` list --name jeos_00 | grep jeos_00 | awk '{print $2}')
+
+if [ "$instid" != "" ] && [ "$floating_ip" != "" ] ; then
+	nova `nova_flags` floating-ip-list | grep $floating_ip | grep $instid && exit_skipped
+	nova `nova_flags` add-floating-ip $instid $floating_ip
+	assoc_entry=$(nova `nova_flags` floating-ip-list | grep $floating_ip | grep $instid)
+	if [ "$assoc_entry" == "" ] ; then
+		nova `nova_flags` floating-ip-list
+		exit_fail
+	else
+		exit_ok
+	fi
+else
+	exit_skipped
+fi
+

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+source functions
+
+instid=$(nova `nova_flags` list --name jeos_00 | grep jeos_00 | awk '{print $2}')
+
+if [ "$instid" != "" ] ; then
+	floating_ip=$(nova `nova_flags` floating-ip-list | grep $instid | awk '{print $2}')
+	if [ "$floating_ip" != "" ] ; then
+		nova `nova_flags` remove-floating-ip $instid $floating_ip
+		floating_ip=$(nova `nova_flags` floating-ip-list | grep $floating_ip | grep None | awk '{print $2}')
+		if [ "$floating_ip" == "" ] ; then
+			nova `nova_flags` floating-ip-list
+			exit_fail
+		else
+			exit_ok
+		fi
+	else
+		exit_skipped
+	fi
+else
+	exit_skipped
+fi
+

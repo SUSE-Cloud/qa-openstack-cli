@@ -1,0 +1,19 @@
+#!/bin/bash
+
+source functions
+
+groupline=$(nova `nova_flags` secgroup-list-rules default | grep 22)
+
+if [ "$groupline" != "" ] ; then
+	nova `nova_flags` secgroup-delete-rule default tcp 22 22 0.0.0.0/0
+	groupline=$(nova `nova_flags` secgroup-list-rules default | grep 22)
+	nova `nova_flags`  secgroup-list-rules default
+	if [ "$groupline" != "" ] ; then
+		exit_fail
+	else
+		exit_ok
+	fi
+else
+	exit_skipped
+fi
+

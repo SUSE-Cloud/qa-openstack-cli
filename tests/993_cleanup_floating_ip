@@ -1,0 +1,20 @@
+#!/bin/bash
+
+source functions
+
+floating_ip=$(nova `nova_flags` floating-ip-list | grep None | awk '{print $2}')
+
+if [ "$floating_ip" != "" ] ; then
+	nova `nova_flags` floating-ip-delete $floating_ip
+	floating_ip=$(nova `nova_flags` floating-ip-list | grep None | awk '{print $2}')
+	if [ "$floating_ip" != "" ] ; then
+		nova floating-ip-list
+		exit_fail
+	else
+		nova floating-ip-list
+		exit_ok
+	fi
+else
+	exit_skipped
+fi
+

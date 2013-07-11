@@ -14,7 +14,7 @@ function glance_flags() {
 	case $1 in
 		"image-create")
 			if [ "$VIRT" == "kvm" ] ; then
-				echo ""
+				echo "--property vm_mode=kvm"
 			elif [ "$VIRT" == "xen-hvm" ] ; then
 				echo "--property vm_mode=hvm"
 			elif [ "$VIRT" == "xen-pv" ] ; then

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+source functions
+
+[ "$VIRT" == "multi" ] || exit_skipped
+
+instid=$(nova `nova_flags` list --name jeos_h0 | grep jeos_h0 | awk '{print $2}')
+
+if [ "$instid" != "" ] ; then
+	nova `nova_flags` delete $instid || exit_fail
+	for i in {1..30} ; do
+		sleep 2
+		instid=$(nova `nova_flags` list --name jeos_h0 | grep jeos_h0 | awk '{print $2}')
+		if [ "$instid" == "" ] ; then
+			exit_ok
+		fi
+	done
+	echo "instid: '$instid'"
+	nova `nova_flags` list --name jeos_h0
+	exit_fail
+else
+	exit_skipped
+fi

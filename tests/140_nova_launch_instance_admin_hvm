@@ -1,0 +1,32 @@
+#!/bin/bash
+
+source functions
+
+[ "$VIRT" == "multi" ] || exit_skipped
+
+nova `nova_flags` image-show jeos2 || exit_skipped
+nova `nova_flags` flavor-show m1.tiny || exit_skipped
+nova `nova_flags` keypair-list | grep dashboard || exit_skipped
+
+
+imgid=$(glance `glance_flags` image-list --name jeos2 --status active | grep jeos2 | awk '{print $2}')
+flavorid=$(nova `nova_flags` flavor-list | grep "m1.tiny" | awk '{print $2}')
+
+instid=$(nova `nova_flags` list --name jeos_h0 | grep jeos_h0 | awk '{print $2}')
+
+if [ "$instid" == "" ] ; then
+	nova `nova_flags` boot --flavor $flavorid --image $imgid jeos_h0 --key-name dashboard || exit_fail
+	for i in {1..30} ; do
+		sleep 2
+		instid=$(nova `nova_flags` list --name jeos_h0 --status ACTIVE | grep jeos_h0 | awk '{print $2}')
+		if [ "$instid" != "" ] ; then
+			nova `nova_flags` list
+			exit_ok
+		fi
+	done
+	exit_fail
+else
+	echo "Instance already running: '$instid'"
+	exit_skipped
+fi
+

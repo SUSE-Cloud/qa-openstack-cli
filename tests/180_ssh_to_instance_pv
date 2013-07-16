@@ -1,0 +1,28 @@
+#!/bin/bash
+
+source functions
+
+[ "$VIRT" == "multi" ] || exit_skipped
+
+instid=$(nova `nova_flags` list --name jeos_p0 | grep jeos_p0 | awk '{print $2}')
+
+if [ "$instid" != "" ] ; then
+	floating_ip=$(nova `nova_flags` floating-ip-list | grep $instid | awk '{print $2}')
+	if [ "$floating_ip" != "" ] ; then
+		for i in {1..20} ; do
+			ssh root@$floating_ip \
+				-o StrictHostKeyChecking=no \
+				-o UserKnownHostsFile=/dev/null \
+				-o ConnectTimeout=3 \
+				-o PasswordAuthentication=no \
+				-o BatchMode=yes >/dev/null echo && exit_ok
+			sleep 2
+		done
+		exit_fail
+	else
+		exit_skipped
+	fi
+else
+	exit_skipped
+fi
+

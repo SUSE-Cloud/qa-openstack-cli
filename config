@@ -2,7 +2,7 @@ export INSECURE=0
 
 #kvm/xen-hvm/xen-pv/lxc
 # multi: kvm, xen-hvm, xen-pv
-export VIRT=kvm
+export VIRT=multi
 
 export DEBUG=0
 

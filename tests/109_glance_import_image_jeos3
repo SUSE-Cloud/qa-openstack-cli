@@ -1,0 +1,37 @@
+#!/bin/bash
+
+source functions
+
+if [ "$VIRT" == "multi" ] ; then
+	VIRT=xen-pv
+else
+	exit_skipped
+fi
+
+imgid=$(glance `glance_flags` image-list --name jeos3 --status active | grep jeos3 | awk '{print $2}')
+
+if [ "$imgid" == "" ] ; then
+	glance `glance_flags` image-create `glance_flags image-create` \
+		--name=jeos3 --is-public=True --container-format=bare \
+		--disk-format=qcow2 --copy-from `glance_flags image-url`
+	if glance `glance_flags` image-list --name jeos3 | grep -q jeos3 ; then
+		for i in {1..15} ; do
+			if glance `glance_flags` image-list --name jeos3 --status active | grep -q jeos3 ; then
+				break
+			else
+				sleep 2
+			fi
+		done
+	fi
+	imgid=$(glance `glance_flags` image-list --name jeos3 --status active | grep jeos3 | awk '{print $2}')
+	if [ "$imgid" == "" ] ; then
+		glance `glance_flags` image-list
+		exit_fail
+	else
+		nova image-show jeos3
+		exit_ok
+	fi
+else
+	exit_skipped
+fi
+

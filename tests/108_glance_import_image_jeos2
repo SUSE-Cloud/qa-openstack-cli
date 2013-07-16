@@ -2,6 +2,10 @@
 
 source functions
 
+if [ "$VIRT" == "multi" ] ; then
+	VIRT=xen-hvm
+fi
+
 imgid=$(glance `glance_flags` image-list --name jeos2 --status active | grep jeos2 | awk '{print $2}')
 
 if [ "$imgid" == "" ] ; then

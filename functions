@@ -17,6 +17,7 @@ function glance_flags() {
 				echo "--property hypervisor_type=kvm"
 			elif [ "$VIRT" == "xen-hvm" ] ; then
 				echo "--property hypervisor_type=xen --property vm_mode=hvm"
+				#echo "--property hypervisor_type=xen --property vm_mode=hvm --property hw_vif_model=netfront"
 			elif [ "$VIRT" == "xen-pv" ] ; then
 				echo "--property hypervisor_type=xen --property vm_mode=xen"
 			elif [ "$VIRT" == "lxc" ] ; then

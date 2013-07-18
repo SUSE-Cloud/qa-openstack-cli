@@ -27,7 +27,7 @@ function glance_flags() {
 			if [ "$VIRT" == "kvm" ] ; then
 				echo "$IMG_KVM"
 			elif [ "$VIRT" == "xen-hvm" ] ; then
-				echo "$IMG_KVM"
+				echo "$IMG_HVM"
 			elif [ "$VIRT" == "xen-pv" ] ; then
 				echo "$IMG_PV"
 			elif [ "$VIRT" == "lxc" ] ; then

@@ -14,5 +14,6 @@ export CYCLE_COUNT=3
 
 
 export IMG_KVM="http://clouddata.cloud.suse.de/images/jeos-64.qcow2"
+export IMG_HVM="http://clouddata.cloud.suse.de/images/jeos-64-hvm.qcow2"
 export IMG_PV="http://clouddata.cloud.suse.de/images/jeos-64-pv.qcow2"
 export IMG_LXC="http://clouddata.cloud.suse.de/images/debian.5-0.x86.qcow2"

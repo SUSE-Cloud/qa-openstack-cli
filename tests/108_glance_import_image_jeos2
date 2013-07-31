@@ -26,7 +26,7 @@ if [ "$imgid" == "" ] ; then
 		glance `glance_flags` image-list
 		exit_fail
 	else
-		nova image-show jeos2
+		glance `glance_flags` image-show jeos2
 		exit_ok
 	fi
 else

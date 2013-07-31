@@ -2,8 +2,8 @@
 
 source functions
 
-nova `nova_flags` image-show jeos1 || exit_skipped
-nova `nova_flags` image-show jeos2 || exit_skipped
+glance `glance_flags` image-show jeos1 || exit_skipped
+glance `glance_flags` image-show jeos2 || exit_skipped
 nova `nova_flags` flavor-show m1.tiny || exit_skipped
 
 function get_imgid() {

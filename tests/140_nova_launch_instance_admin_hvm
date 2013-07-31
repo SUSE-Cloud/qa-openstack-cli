@@ -4,7 +4,7 @@ source functions
 
 [ "$VIRT" == "multi" ] || exit_skipped
 
-nova `nova_flags` image-show jeos2 || exit_skipped
+glance `glance_flags` image-show jeos2 || exit_skipped
 nova `nova_flags` flavor-show m1.tiny || exit_skipped
 nova `nova_flags` keypair-list | grep dashboard || exit_skipped
 

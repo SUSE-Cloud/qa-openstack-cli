@@ -8,7 +8,7 @@ nova `nova_flags` flavor-show m1.tiny || exit_skipped
 imgid=$(glance `glance_flags` image-list --name jeos1 --status active | grep jeos1 | awk '{print $2}')
 flavorid=$(nova `nova_flags` flavor-list | grep "m1.tiny" | awk '{print $2}')
 
-instid=$(nova `nova_flags` list --name jeos_multi | grep jeos_multi | awk '{print $2}')
+instid=$(nova `nova_flags` list --name jeos_multi | grep jeos_multi | grep -v multiimg | awk '{print $2}')
 
 if [ "$instid" == "" ] ; then
 	for i in `seq 1 $MULTI_INST_COUNT` ; do
@@ -16,7 +16,7 @@ if [ "$instid" == "" ] ; then
 	done
 	wait
 	echo "Done Building"
-	instids=$(nova `nova_flags` --os_username crowbar list --name jeos_multi --status ACTIVE | grep jeos_multi | awk '{print $2}')
+	instids=$(nova `nova_flags` --os_username crowbar list --name jeos_multi --status ACTIVE | grep jeos_multi | grep -v multiimg | awk '{print $2}')
 	instidcount=0
 	for instid in $instids ; do
 		let instidcount=instidcount+1
@@ -26,17 +26,17 @@ if [ "$instid" == "" ] ; then
 	if [ "$instidcount" != "$MULTI_INST_COUNT" ] ; then
 		echo "Delete triggered: $instidcount"
 		echo "Started: $MULTI_INST_COUNT"
-		nova `nova_flags` --os_username crowbar list --name jeos_multi
+		nova `nova_flags` --os_username crowbar list --name jeos_multi | grep -v multiimg
 		exit_fail
 	fi
 	for i in {1..30} ; do
 		sleep 2
-		instid=$(nova `nova_flags` --os_username crowbar list --name jeos_multi | grep jeos_multi | awk '{print $2}')
+		instid=$(nova `nova_flags` --os_username crowbar list --name jeos_multi | grep jeos_multi | grep -v multiimg | awk '{print $2}')
 		if [ "$instid" == "" ] ; then
 			exit_ok
 		fi
 	done
-	nova `nova_flags` --os_username crowbar list --name jeos_multi
+	nova `nova_flags` --os_username crowbar list --name jeos_multi | grep -v multiimg
 	exit_fail
 else
 	echo "Instance already running: '$instid'"

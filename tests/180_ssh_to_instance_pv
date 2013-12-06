@@ -9,7 +9,7 @@ instid=$(nova `nova_flags` list --name jeos_p0 | grep jeos_p0 | awk '{print $2}'
 if [ "$instid" != "" ] ; then
 	floating_ip=$(nova `nova_flags` floating-ip-list | grep $instid | awk '{print $2}')
 	if [ "$floating_ip" != "" ] ; then
-		for i in {1..20} ; do
+		for i in {1..30} ; do
 			ssh root@$floating_ip \
 				-o StrictHostKeyChecking=no \
 				-o UserKnownHostsFile=/dev/null \

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+source functions
+
+if keystone `keystone_flags` service-list | grep -q heat ; then
+	if heat `heat_flags` stack-list ; then
+		exit_ok
+	else
+		exit_fail
+	fi
+else
+	exit_skipped
+fi
+

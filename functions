@@ -63,6 +63,26 @@ function keystone_flags() {
 	esac
 }
 
+function ceilometer_flags() {
+	case $1 in
+		"")
+			if [ "$INSECURE" == "1" ] ; then
+				echo "--insecure"
+			fi
+		;;
+	esac
+}
+
+function heat_flags() {
+	case $1 in
+		"")
+			if [ "$INSECURE" == "1" ] ; then
+				echo "--insecure"
+			fi
+		;;
+	esac
+}
+
 function exit_ok() {
 	exit 0
 }

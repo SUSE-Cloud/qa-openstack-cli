@@ -1,0 +1,27 @@
+#!/bin/bash
+
+source functions
+
+glance `glance_flags` image-show jeos1 || exit_skipped
+nova `nova_flags` flavor-show m1.small || exit_skipped
+nova `nova_flags` keypair-list | grep dashboard || exit_skipped
+
+imgid=$(glance `glance_flags` image-list --name jeos1 --status active | grep jeos1 | awk '{print $2}')
+
+if keystone `keystone_flags` service-list | grep -q heat ; then
+	heat `heat_flags` stack-list | grep -q jeos_00 && exit_skipped
+	if heat `heat_flags` stack-create -f data/heat_stack.yaml -c 3 -P "ImageId=$imgid" jeos_00 ; then
+		for i in {1..30} ; do
+			sleep 2
+			if heat `heat_flags` stack-list | grep jeos_00 | grep -q CREATE_COMPLETE ; then
+				exit_ok
+			fi
+		done
+		exit_fail
+	else
+		exit_fail
+	fi
+else
+	exit_skipped
+fi
+

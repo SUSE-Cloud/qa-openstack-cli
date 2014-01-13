@@ -3,7 +3,8 @@
 source functions
 
 if keystone `keystone_flags` service-list | grep -q heat ; then
-	if heat `heat_flags` stack-list | grep jeos_00 | grep -q CREATE_COMPLETE ; then
+	heat `heat_flags` stack-list | grep -q jeos_00 || exit_skipped
+	if heat `heat_flags` stack-delete jeos_00 ; then
 		exit_ok
 	else
 		exit_fail

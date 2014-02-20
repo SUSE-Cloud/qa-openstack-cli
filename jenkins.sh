@@ -19,3 +19,4 @@ fi
 
 echo
 ./run.sh | perl -pe '$|=1;s/\e\[?.*?[\@-~]//g'
+exit ${PIPESTATUS[0]}

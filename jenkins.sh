@@ -6,7 +6,15 @@ zypper -n install git-core
 grep -q LESS /etc/bash.bashrc || echo "export LESS='-R'" >> /etc/bash.bashrc ; source /etc/bash.bashrc
 git config --global color.diff auto ; git config --global color.status auto ; git config --global color.branch auto
 
-test -e qa-openstack-cli || git clone https://github.com/SUSE-Cloud/qa-openstack-cli.git
-cd qa-openstack-cli
+if [ -e qa-openstack-cli ] ; then
+	cd qa-openstack-cli
+	if [ "x$UPDATE_TESTSUITE" == "x1" ] ; then
+		git pull --rebase
+	fi
+else
+	git clone https://github.com/SUSE-Cloud/qa-openstack-cli.git
+	cd qa-openstack-cli
+fi
+
 echo
 ./run.sh | perl -pe '$|=1;s/\e\[?.*?[\@-~]//g'

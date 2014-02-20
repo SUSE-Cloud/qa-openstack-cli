@@ -9,4 +9,4 @@ git config --global color.diff auto ; git config --global color.status auto ; gi
 test -e qa-openstack-cli || git clone https://github.com/SUSE-Cloud/qa-openstack-cli.git
 cd qa-openstack-cli
 echo
-./run.sh | tee jenkins.log
+./run.sh | perl -pe 's/\e\[?.*?[\@-~]//g'

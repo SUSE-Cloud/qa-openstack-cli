@@ -4,7 +4,7 @@ source functions
 
 [ "$VIRT" == "multi" ] || exit_skipped
 
-floating_ip=$(nova `nova_flags` floating-ip-list | grep None | awk '{print $2}')
+floating_ip=$(nova `nova_flags` floating-ip-list | grep None | head -1 | awk '{print $2}')
 instid=$(nova `nova_flags` list --name jeos_h0 | grep jeos_h0 | awk '{print $2}')
 
 if [ "$instid" != "" ] && [ "$floating_ip" != "" ] ; then

@@ -2,11 +2,11 @@
 
 source functions
 
-floating_ip=$(nova `nova_flags` floating-ip-list | grep None | awk '{print $2}')
+floating_ip=$(nova `nova_flags` floating-ip-list | grep None | head -1 | awk '{print $2}')
 
 if [ "$floating_ip" != "" ] ; then
 	nova `nova_flags` floating-ip-delete $floating_ip
-	floating_ip=$(nova `nova_flags` floating-ip-list | grep None | awk '{print $2}')
+	floating_ip=$(nova `nova_flags` floating-ip-list | grep "$floating_ip" | awk '{print $2}')
 	if [ "$floating_ip" != "" ] ; then
 		nova floating-ip-list
 		exit_fail

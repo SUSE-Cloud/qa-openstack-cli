@@ -9,6 +9,7 @@ git config --global color.diff auto ; git config --global color.status auto ; gi
 if [ -e qa-openstack-cli ] ; then
 	cd qa-openstack-cli
 	if [ "x$UPDATE_TESTSUITE" == "x1" ] ; then
+		echo "Performing GIT PULL --REBASE..."
 		git pull --rebase
 	fi
 else

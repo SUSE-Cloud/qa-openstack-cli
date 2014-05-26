@@ -2,13 +2,13 @@
 
 source functions
 
-floating_ip=$(nova `nova_flags` floating-ip-list | grep None | awk '{print $2}')
+floating_ip=$(nova `nova_flags` floating-ip-list | grep "^|[^|]*|[ -]*|" | awk '{print $2}')
 
 if [ "$floating_ip" == "" ] ; then
 	nova `nova_flags` floating-ip-create
-	floating_ip=$(nova `nova_flags` floating-ip-list | grep None | awk '{print $2}')
+	floating_ip=$(nova `nova_flags` floating-ip-list | grep "^|[^|]*|[ -]*|" | awk '{print $2}')
 	if [ "$floating_ip" == "" ] ; then
-		nova floating-ip-list
+		nova `nova_flags` floating-ip-list
 		exit_fail
 	else
 		exit_ok

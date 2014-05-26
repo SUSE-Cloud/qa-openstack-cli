@@ -10,7 +10,7 @@ if [ "$instid" != "" ] ; then
 	floating_ip=$(nova `nova_flags` floating-ip-list | grep $instid | awk '{print $2}')
 	if [ "$floating_ip" != "" ] ; then
 		nova `nova_flags` remove-floating-ip $instid $floating_ip
-		floating_ip=$(nova `nova_flags` floating-ip-list | grep $floating_ip | grep None | awk '{print $2}')
+		floating_ip=$(nova `nova_flags` floating-ip-list | grep $floating_ip | grep "^|[^|]*|[ -]*|" | awk '{print $2}')
 		if [ "$floating_ip" == "" ] ; then
 			nova `nova_flags` floating-ip-list
 			exit_fail

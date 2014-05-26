@@ -2,7 +2,7 @@
 
 source functions
 
-floating_ip=$(nova `nova_flags` floating-ip-list | grep None | head -1 | awk '{print $2}')
+floating_ip=$(nova `nova_flags` floating-ip-list | grep "^|[^|]*|[ -]*|" | head -1 | awk '{print $2}')
 instid=$(nova `nova_flags` list --name jeos_00 | grep jeos_00 | awk '{print $2}')
 
 if [ "$instid" != "" ] && [ "$floating_ip" != "" ] ; then

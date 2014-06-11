@@ -3,7 +3,7 @@
 source functions
 
 glance `glance_flags` image-show jeos1 || exit_skipped
-nova `nova_flags` flavor-show m1.small || exit_skipped
+nova `nova_flags` flavor-show m1.tiny || exit_skipped
 nova `nova_flags` keypair-list | grep dashboard || exit_skipped
 
 imgid=$(glance `glance_flags` image-list --name jeos1 --status active | grep jeos1 | awk '{print $2}')

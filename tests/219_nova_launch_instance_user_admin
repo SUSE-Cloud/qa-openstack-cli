@@ -3,11 +3,11 @@
 source functions
 
 glance `glance_flags` image-show jeos1 || exit_skipped
-nova `nova_flags` flavor-show m1.small || exit_skipped
+nova `nova_flags` flavor-show m1.tiny || exit_skipped
 
 
 imgid=$(glance `glance_flags` image-list --name jeos1 --status active | grep jeos1 | awk '{print $2}')
-flavorid=$(nova `nova_flags` flavor-list | grep "m1.small" | awk '{print $2}')
+flavorid=$(nova `nova_flags` flavor-list | grep "m1.tiny" | awk '{print $2}')
 
 instid=$(nova `nova_flags` list --name jeos_02 | grep jeos_02 | awk '{print $2}')
 

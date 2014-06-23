@@ -10,7 +10,7 @@ imgid=$(glance `glance_flags` image-list --name jeos1 --status active | grep jeo
 
 if keystone `keystone_flags` service-list | grep -q heat ; then
 	heat `heat_flags` stack-list | grep -q jeos_00 && exit_skipped
-	if heat `heat_flags` stack-create -f data/heat_stack.yaml -c 3 -P "ImageId=$imgid" jeos_00 ; then
+	if heat `heat_flags` stack-create -f data/heat_stack.yaml -t 3 -P "ImageId=$imgid" jeos_00 ; then
 		for i in {1..30} ; do
 			sleep 2
 			if heat `heat_flags` stack-list | grep jeos_00 | grep -q CREATE_COMPLETE ; then

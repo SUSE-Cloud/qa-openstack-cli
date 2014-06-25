@@ -1,0 +1,25 @@
+#!/bin/bash
+
+source functions
+
+instid=$(nova `nova_flags` list --name jeos_00 | grep jeos_00 | awk '{print $2}')
+
+if [ "$instid" != "" ] ; then
+	volid=$(cinder `cinder_flags` list --display-name vol1 --status in-use | grep vol1 | grep $instid | cut -d " " -f2)
+	if [ "$volid" != "" ] ; then
+		nova `nova_flags` volume-detach $instid $volid
+		sleep 3
+		volid=$(cinder `cinder_flags` list --display-name vol1 --status available | grep vol1 | cut -d " " -f2)
+		if [ "$volid" == "" ] ; then
+			cinder `cinder_flags` list
+			exit_fail
+		else
+			exit_ok
+		fi
+	else
+		exit_skipped
+	fi
+else
+	exit_skipped
+fi
+

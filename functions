@@ -43,6 +43,16 @@ function glance_flags() {
 	esac
 }
 
+function cinder_flags() {
+	case $1 in
+		"")
+			if [ "$INSECURE" == "1" ] ; then
+				echo "--insecure"
+			fi
+		;;
+	esac
+}
+
 function nova_flags() {
 	case $1 in
 		"")

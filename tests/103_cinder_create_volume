@@ -1,0 +1,29 @@
+#!/bin/bash
+
+source functions
+
+volid=$(cinder `cinder_flags` list --display-name vol1 --status available | grep vol1 | cut -d " " -f2)
+
+if [ "$volid" == "" ] ; then
+	cinder `cinder_flags` create --display-name vol1 1
+	if cinder `cinder_flags` list --display-name vol1 | grep -q vol1 ; then
+		for i in {1..15} ; do
+			if cinder `cinder_flags` list --display-name vol1 --status available | grep -q vol1 ; then
+				break
+			else
+				sleep 2
+			fi
+		done
+	fi
+	volid=$(cinder `cinder_flags` list --display-name vol1 --status available | grep vol1 | cut -d " " -f2)
+	if [ "$volid" == "" ] ; then
+		cinder `cinder_flags` list
+		exit_fail
+	else
+		cinder `cinder_flags` show vol1
+		exit_ok
+	fi
+else
+	exit_skipped
+fi
+

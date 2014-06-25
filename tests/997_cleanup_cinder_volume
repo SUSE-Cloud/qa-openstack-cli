@@ -1,0 +1,19 @@
+#!/bin/bash
+
+source functions
+
+volid=$(cinder `cinder_flags` list --display-name vol1 --status available | grep vol1 | cut -d " " -f2)
+
+if [ "$volid" != "" ] ; then
+	cinder `cinder_flags` delete $volid
+	volid=$(cinder `cinder_flags` list --display-name vol1 --status available | grep vol1 | cut -d " " -f2)
+	if [ "$volid" != "" ] ; then
+		echo "volid: '$volid'"
+		cinder `cinder_flags` list --display-name vol1 --status available
+		exit_fail
+	else
+		exit_ok
+	fi
+else
+	exit_skipped
+fi

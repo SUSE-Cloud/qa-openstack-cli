@@ -13,7 +13,7 @@ if [[ "$1" == "init" ]] ; then
 	flavorid=$(nova `nova_flags` flavor-list | grep "m1.tiny" | awk '{print $2}')
 
 	nova `nova_flags` quota-update --floating-ips 200 --instances 200 --cores 200 $tenantid
-	neutron `neutron_flags` quota-update --port 200 --vip 200 --tenant-id $tenantid
+	neutron quota-update --port 200 --vip 200 --tenant-id $tenantid
 
 	nova `nova_flags` boot --num-instances 60 --flavor $flavorid --image $imgid jeos_auto60 --key-name dashboard
 elif [[ "$1" == "check" ]] ; then
@@ -27,6 +27,12 @@ elif [[ "$1" == "check" ]] ; then
 
 	echo -e "\nChecking via ssh..."
 
+	# free floating ip
+	for ent in "$(nova `nova_flags` floating-ip-list | grep floating)" ; do
+		if [[ `echo $ent | cut -d ' ' -f 4` != "-" ]] ; then
+			nova `nova_flags` remove-floating-ip `echo $ent | cut -d ' ' -f 4` `echo $ent | cut -d ' ' -f 2`
+		fi
+	done
 	floating_ip=$(nova `nova_flags` floating-ip-list | grep "^|[^|]*|[ -]*|" | head -1 | awk '{print $2}')
 
 	failcounter=0
@@ -54,6 +60,16 @@ elif [[ "$1" == "check" ]] ; then
 		echo -e "[\e[1;31mfail\e[00m] could not ssh to $failcounter instances"
 		exit 1
 	fi
+elif [[ "$1" == "cleanup" ]] ; then
+	for instid in `nova list | grep jeos_auto60 | cut -d ' ' -f 2` ; do
+		echo -n "Deleting $instid ... "
+		nova `nova_flags` delete $instid
+		echo "DONE"
+	done
+	./tests/991_cleanup_glance_image_jeos1
+	./tests/994_cleanup_floating_ip
+	./tests/995_cleanup_security_rules
+	./tests/996_cleanup_ssh_keypair
 else
 	cat <<EOF
 Scaling up with Neutron
@@ -63,7 +79,9 @@ This test starts 60 instances and tries to reach them using ssh
 Usage:
 $0 init
 # wait until all 60 instances are ACTIVE
+# and then wait one more minute for booting
 $0 check
+$0 cleanup
 EOF
 
 fi

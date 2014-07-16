@@ -6,7 +6,7 @@ export OS_TENANT_NAME=admin
 export NOVA_PROJECT_ID=$OS_TENANT_NAME
 
 tenantid=$(keystone `keystone_flags` tenant-list | grep openstack | awk '{print $2}')
-userid=$(keystone `keystone_flags` user-list | grep admin | awk '{print $2}')
+userid=$(keystone `keystone_flags` user-list | grep ' admin ' | awk '{print $2}')
 
 if [ "$tenantid" != "" ] ; then
 	roleid=$(keystone `keystone_flags` user-role-list --user-id $userid --tenant-id $tenantid |grep admin | awk '{print $1}')

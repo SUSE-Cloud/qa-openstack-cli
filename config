@@ -4,7 +4,7 @@ export INSECURE=0
 # multi: kvm, xen-hvm, xen-pv
 export VIRT=multi
 
-export DEBUG=0
+export DEBUG=1
 export RUN_XEN_TESTS=0
 
 export BREAK_ON_FAIL=0

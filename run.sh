@@ -67,6 +67,9 @@ for testname in `ls ./tests` ; do
 	elif [ "$1" == "nocleanup" ] ; then
 		echo "$testname" | grep -q "cleanup" && continue
 	fi
+    if [[ "$RUN_XEN_TESTS" != "1" ]] && ( [[ "$testname" =~ "_hvm"$ ]] || [[ "$testname" =~ "_pv"$ ]] ) ; then
+        continue
+    fi
 	runtest "$testname"
 	ret=$?
 	if [[ "[1]" =~ "$ret" ]] && [ "$BREAK_ON_FAIL" == "1" ] ; then

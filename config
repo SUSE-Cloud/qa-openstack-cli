@@ -5,6 +5,7 @@ export INSECURE=0
 export VIRT=multi
 
 export DEBUG=0
+export RUN_XEN_TESTS=0
 
 export BREAK_ON_FAIL=0
 

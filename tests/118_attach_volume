@@ -8,7 +8,7 @@ instid=$(nova `nova_flags` list --name jeos_00 | grep jeos_00 | awk '{print $2}'
 if [ "$instid" != "" ] && [ "$volid" != "" ] ; then
 	cinder `cinder_flags` list | grep $volid | grep $instid && exit_skipped
 	nova `nova_flags` volume-attach $instid $volid
-	sleep 3
+	sleep 30
 	assoc_entry=$(cinder `cinder_flags` list | grep $volid | grep $instid)
 	if [ "$assoc_entry" == "" ] ; then
 		cinder `cinder_flags` list
